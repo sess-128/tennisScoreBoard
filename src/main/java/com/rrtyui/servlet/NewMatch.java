@@ -7,6 +7,7 @@ import com.rrtyui.mapper.PlayerReadMapper;
 import com.rrtyui.repository.PlayerRepository;
 import com.rrtyui.service.OngoingMatchesService;
 import com.rrtyui.util.HibernateUtil;
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -22,7 +23,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Proxy;
 
-@WebServlet("/new-match")
+@WebServlet("/new-match.html")
 public class NewMatch extends HttpServlet {
 
 
@@ -49,31 +50,23 @@ public class NewMatch extends HttpServlet {
                     .newInstance(playerRepository, playerReadMapper, playerCreateMapper);
 
 
-
             String player1 = req.getParameter("player_1");
             String player2 = req.getParameter("player_2");
 
             PlayerCreateDto playerCreateDto = new PlayerCreateDto(player1);
             PlayerCreateDto playerCreateDto2 = new PlayerCreateDto(player2);
 
+            var uuid = ongoingMatchesService.createMatch(playerCreateDto, playerCreateDto2);
 
-            var pla1Id = ongoingMatchesService.create(playerCreateDto);
-            var pla2Id = ongoingMatchesService.create(playerCreateDto2);
-
-            System.out.println(pla1Id);
-            System.out.println(pla2Id);
-
-            var byId = ongoingMatchesService.findById(2L);
-            System.out.println(byId);
+            req.setAttribute("UUID", 2546);
             try {
-                resp.sendRedirect("/match-score.html");
-                resp.getWriter().write(player1);
-                resp.getWriter().write(player2);
+                resp.sendRedirect("/match-score.jsp?UUID=" + uuid);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
 
-        } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException | InstantiationException e) {
+        } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException |
+                 InstantiationException e) {
             throw new RuntimeException(e);
         }
     }
