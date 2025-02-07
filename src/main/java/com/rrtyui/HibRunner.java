@@ -24,48 +24,48 @@ import java.util.List;
 public class HibRunner {
 
 
-    public static void main(String[] args) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
-
-        try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory()) {
-            var session = (Session) Proxy.newProxyInstance(SessionFactory.class.getClassLoader(), new Class[]{Session.class},
-                    (proxy, method, args1) -> method.invoke(sessionFactory.getCurrentSession(), args1));
-
-
-
-//            session.beginTransaction();
-
-
-
-            var playerRepository = new PlayerRepository(session);
-            var playerReadMapper = new PlayerReadMapper();
-            var playerCreateMapper = new PlayerCreateMapper();
-            var transactionInterceptor = new TransactionInterceptor(sessionFactory);
-            OngoingMatchesService ongoingMatchesService = new ByteBuddy()
-                    .subclass(OngoingMatchesService.class)
-                    .method(ElementMatchers.any())
-                    .intercept(MethodDelegation.to(transactionInterceptor))
-                    .make()
-                    .load(OngoingMatchesService.class.getClassLoader())
-                    .getLoaded()
-                    .getDeclaredConstructor(PlayerRepository.class, PlayerReadMapper.class, PlayerCreateMapper.class)
-                    .newInstance(playerRepository, playerReadMapper, playerCreateMapper);
-
-
+//    public static void main(String[] args) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
 //
-//            Player player = Player.builder()
-//                    .name("Капитан залупа")
-//                    .build();
-//            playerRepository.save(player);
-
-//            var ongoingMatchesService = new OngoingMatchesService(playerRepository, playerReadMapper, playerCreateMapper);
-
-//            ongoingMatchesService.findById(1L).ifPresent(System.out::println);
-
-            PlayerCreateDto playerCreateDto = new PlayerCreateDto("dima");
-            ongoingMatchesService.create(playerCreateDto);
-
-//            session.getTransaction().commit();
-
-        }
-    }
+//        try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory()) {
+//            var session = (Session) Proxy.newProxyInstance(SessionFactory.class.getClassLoader(), new Class[]{Session.class},
+//                    (proxy, method, args1) -> method.invoke(sessionFactory.getCurrentSession(), args1));
+//
+//
+//
+////            session.beginTransaction();
+//
+//
+//
+//            var playerRepository = new PlayerRepository(session);
+//            var playerReadMapper = new PlayerReadMapper();
+//            var playerCreateMapper = new PlayerCreateMapper();
+//            var transactionInterceptor = new TransactionInterceptor(sessionFactory);
+//            OngoingMatchesService ongoingMatchesService = new ByteBuddy()
+//                    .subclass(OngoingMatchesService.class)
+//                    .method(ElementMatchers.any())
+//                    .intercept(MethodDelegation.to(transactionInterceptor))
+//                    .make()
+//                    .load(OngoingMatchesService.class.getClassLoader())
+//                    .getLoaded()
+//                    .getDeclaredConstructor(PlayerRepository.class, PlayerReadMapper.class, PlayerCreateMapper.class)
+//                    .newInstance(playerRepository, playerReadMapper, playerCreateMapper);
+//
+//
+////
+////            Player player = Player.builder()
+////                    .name("Капитан залупа")
+////                    .build();
+////            playerRepository.save(player);
+//
+////            var ongoingMatchesService = new OngoingMatchesService(playerRepository, playerReadMapper, playerCreateMapper);
+//
+////            ongoingMatchesService.findById(1L).ifPresent(System.out::println);
+//
+//            PlayerCreateDto playerCreateDto = new PlayerCreateDto("dima");
+//            ongoingMatchesService.create(playerCreateDto);
+//
+////            session.getTransaction().commit();
+//
+//        }
+//    }
 }
