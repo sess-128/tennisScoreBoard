@@ -8,6 +8,7 @@ import com.rrtyui.repository.PlayerRepository;
 import com.rrtyui.service.OngoingMatchesService;
 import com.rrtyui.util.HibernateUtil;
 import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -23,12 +24,11 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Proxy;
 
-@WebServlet("/new-match")
-public class NewMatch extends HttpServlet {
-
+    @WebServlet("/new-match")
+public class NewMatchServlet extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost   (HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory()) {
             var session = (Session) Proxy.newProxyInstance(SessionFactory.class.getClassLoader(), new Class[]{Session.class},
@@ -58,9 +58,13 @@ public class NewMatch extends HttpServlet {
 
             var uuid = ongoingMatchesService.createMatch(playerCreateDto, playerCreateDto2);
 
-            req.setAttribute("UUID", 2546);
+            req.setAttribute("UUID", 25456);
             try {
-                resp.sendRedirect("/match-score.jsp?UUID=" + uuid);
+                resp.sendRedirect("/match-score?UUID=" + uuid);
+//                ServletContext servletContext = getServletContext();
+//                RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("/match-score.jsp");
+//                requestDispatcher.forward(req, resp);
+
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
