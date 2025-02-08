@@ -1,5 +1,6 @@
 package com.rrtyui.servlet;
 
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -13,10 +14,12 @@ public class MatchScoreServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String uuid = req.getParameter("UUID");
-        try {
-            resp.getWriter().write("hello world");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+
+        req.setAttribute("UUID", uuid);
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/match-score.jsp");
+        dispatcher.forward(req, resp);
     }
 }
+/**
+ * У нас есть мапа текущих матчей <UUID, MatchScoreModel>
+ */
