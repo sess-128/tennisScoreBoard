@@ -19,7 +19,10 @@ public class MatchScoreServlet extends HttpServlet {
         RequestDispatcher dispatcher = req.getRequestDispatcher("/match-score.jsp");
         dispatcher.forward(req, resp);
     }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+    }
 }
-/**
- * У нас есть мапа текущих матчей <UUID, MatchScoreModel>
- */
+

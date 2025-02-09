@@ -1,7 +1,11 @@
 package com.rrtyui.dto;
 
 import com.rrtyui.entity.Player;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class MatchScoreModel {
     private Player player1;
     private Player player2;

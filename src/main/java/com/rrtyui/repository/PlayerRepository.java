@@ -7,6 +7,4 @@ public class PlayerRepository extends CrudRepository<Long, Player> {
     public PlayerRepository(EntityManager entityManager) {
         super(Player.class, entityManager);
     }
-
-
 }

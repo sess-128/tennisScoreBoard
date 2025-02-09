@@ -1,3 +1,6 @@
+<%@ page import="java.util.UUID" %>
+<%@ page import="com.rrtyui.dto.MatchScoreModel" %>
+<%@ page import="com.rrtyui.util.MatchStorage" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <html lang="en">
@@ -7,8 +10,16 @@
 </head>
 <body>
 <p>Страница текущего матча</p>
-<h1>Welcome, your UUID: ${UUID}!</h1>
+<%
+    String uuidString = request.getParameter("UUID");
 
+    if (uuidString != null && !uuidString.isEmpty()) {
+        UUID uuid = UUID.fromString(uuidString);
+
+        MatchScoreModel match = MatchStorage.getMatch(uuidString);
+
+        if (match != null) {
+%>
 <table>
     <thead>
     <tr>
@@ -20,21 +31,35 @@
     </thead>
     <tbody>
     <tr>
-        <td>Ячейка 1,1</td>
-        <td>Ячейка 1,2</td>
-        <td>Ячейка 1,2</td>
-        <td>Ячейка 1,2</td>
-        <td>Кнопка +</td>
+        <td><%= match.getPlayer1().getName() %></td>
+        <td><%= match.getPlayer1Sets() %></td>
+        <td><%= match.getPlayer1Games() %></td>
+        <td><%= match.getPlayer1Points() %></td>
+        <td><form action="${pageContext.request.contextPath}/match-score" method="post" id="player1">
+            <button type="submit" form="player1">Очко 1-му игроку</button>
+        </form></td>
     </tr>
     <tr>
-        <td>Ячейка 1,1</td>
-        <td>Ячейка 1,2</td>
-        <td>Ячейка 1,2</td>
-        <td>Ячейка 1,2</td>
-        <td>Кнопка +</td>
+        <td><%= match.getPlayer2().getName() %></td>
+        <td><%= match.getPlayer2Sets() %></td>
+        <td><%= match.getPlayer2Games() %></td>
+        <td><%= match.getPlayer2Points() %></td>
+        <td><form action="${pageContext.request.contextPath}/match-score" method="post" id="player2">
+            <button type="submit" form="player2">Очко 2-му игроку</button>
+        </form></td>
     </tr>
     </tbody>
 </table>
+<%
+        } else {
+            out.println("<p>Матч не найден для UUID: " + uuidString + "</p>");
+        }
+    } else {
+        out.println("<p>UUID не указан.</p>");
+    }
+%>
+
+
 
 </body>
 </html>

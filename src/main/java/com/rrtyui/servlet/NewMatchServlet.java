@@ -14,7 +14,6 @@ import java.io.IOException;
 
 @WebServlet("/new-match")
 public class NewMatchServlet extends HttpServlet {
-
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
@@ -32,7 +31,6 @@ public class NewMatchServlet extends HttpServlet {
 
             resp.sendRedirect("/match-score?UUID=" + uuid);
         } catch (IOException e) {
-            resp.getWriter().write("dolboeb");
             throw new RuntimeException(e);
         }
     }

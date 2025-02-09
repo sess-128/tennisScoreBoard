@@ -1,6 +1,7 @@
 package com.rrtyui.repository;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import lombok.RequiredArgsConstructor;
 
 import java.io.Serializable;
@@ -34,6 +35,13 @@ public abstract class CrudRepository<K extends Serializable, E> implements Repos
     @Override
     public Optional<E> findById(K id) {
         return Optional.ofNullable(entityManager.find(clazz, id));
+    }
+
+    @Override
+    public Optional<E> findByName(String name) {
+        TypedQuery<E> query = entityManager.createQuery("SELECT e FROM " + clazz.getSimpleName() + " e WHERE e.name = :name", clazz);
+        query.setParameter("name", name);
+        return query.getResultList().stream().findFirst();
     }
 
     @Override
