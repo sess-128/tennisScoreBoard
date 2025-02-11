@@ -1,5 +1,8 @@
 package com.rrtyui.servlet;
 
+import com.rrtyui.dto.MatchScoreModel;
+import com.rrtyui.service.MatchScoreCalculationService;
+import com.rrtyui.util.MatchStorage;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -11,6 +14,7 @@ import java.io.IOException;
 
 @WebServlet("/match-score")
 public class MatchScoreServlet extends HttpServlet {
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String uuid = req.getParameter("UUID");
@@ -21,8 +25,15 @@ public class MatchScoreServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String player = req.getParameter("player");
+        String uuid = req.getParameter("UUID");
+        MatchScoreModel match = MatchStorage.getMatch(uuid);
+        MatchScoreCalculationService matchScoreCalculationService = new MatchScoreCalculationService(match);
 
+        matchScoreCalculationService.addPoint(player);
+
+        resp.sendRedirect(req.getContextPath() + "/match-score?UUID=" + uuid);
     }
 }
 

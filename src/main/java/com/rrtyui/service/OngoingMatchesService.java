@@ -6,7 +6,6 @@ import com.rrtyui.dto.PlayerCreateDto;
 import com.rrtyui.entity.Player;
 import com.rrtyui.interceptor.TransactionInterceptor;
 import com.rrtyui.mapper.PlayerCreateMapper;
-import com.rrtyui.mapper.PlayerReadMapper;
 import com.rrtyui.repository.PlayerRepository;
 import com.rrtyui.util.MatchStorage;
 import jakarta.transaction.Transactional;
@@ -41,7 +40,7 @@ public class OngoingMatchesService {
     }
 
     @Transactional
-    public Player getOrAddPlayer (PlayerCreateDto playerDto) {
+    private Player getOrAddPlayer (PlayerCreateDto playerDto) {
         Player player = playerCreateMapper.mapFrom(playerDto);
 
         return playerRepository.findByName(player.getName())

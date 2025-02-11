@@ -31,22 +31,38 @@
     </thead>
     <tbody>
     <tr>
-        <td><%= match.getPlayer1().getName() %></td>
-        <td><%= match.getPlayer1Sets() %></td>
-        <td><%= match.getPlayer1Games() %></td>
-        <td><%= match.getPlayer1Points() %></td>
-        <td><form action="${pageContext.request.contextPath}/match-score" method="post" id="player1">
-            <button type="submit" form="player1">Очко 1-му игроку</button>
-        </form></td>
+        <td><%= match.getPlayer1().getName() %>
+        </td>
+        <td><%= match.getPlayer1Sets() %>
+        </td>
+        <td><%= match.getPlayer1Games() %>
+        </td>
+        <td><%= match.getPlayer1Points() %>
+        </td>
+        <td>
+        <form action="${pageContext.request.contextPath}/match-score" method="post">
+            <input type="hidden" name="UUID" value="<%= uuidString %>">
+            <input type="hidden" name="player" value="1">
+            <button type="submit">Очко 1-му игроку</button>
+        </form>
+        </td>
     </tr>
     <tr>
-        <td><%= match.getPlayer2().getName() %></td>
-        <td><%= match.getPlayer2Sets() %></td>
-        <td><%= match.getPlayer2Games() %></td>
-        <td><%= match.getPlayer2Points() %></td>
-        <td><form action="${pageContext.request.contextPath}/match-score" method="post" id="player2">
-            <button type="submit" form="player2">Очко 2-му игроку</button>
-        </form></td>
+        <td><%= match.getPlayer2().getName() %>
+        </td>
+        <td><%= match.getPlayer2Sets() %>
+        </td>
+        <td><%= match.getPlayer2Games() %>
+        </td>
+        <td><%= match.getPlayer2Points() %>
+        </td>
+        <td>
+            <form action="${pageContext.request.contextPath}/match-score" method="post">
+                <input type="hidden" name="UUID" value="<%= uuidString %>">
+                <input type="hidden" name="player" value="2">
+                <button type="submit">Очко 2-му игроку</button>
+            </form>
+        </td>
     </tr>
     </tbody>
 </table>
@@ -58,7 +74,6 @@
         out.println("<p>UUID не указан.</p>");
     }
 %>
-
 
 
 </body>

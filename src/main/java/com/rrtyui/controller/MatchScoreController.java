@@ -1,15 +1,13 @@
 package com.rrtyui.controller;
 
-import com.rrtyui.service.FinishedMatchesPersistenceService;
 import com.rrtyui.service.MatchScoreCalculationService;
-import com.rrtyui.service.OngoingMatchesService;
+import jakarta.servlet.annotation.WebServlet;
 import lombok.AllArgsConstructor;
 
+@WebServlet("/MatchScoreController")
 @AllArgsConstructor
 public class MatchScoreController {
-    private final FinishedMatchesPersistenceService finishedMatchesPersistenceService;
     private final MatchScoreCalculationService matchScoreCalculationService;
-    private final OngoingMatchesService ongoingMatchesService;
 
     public Long createNewMatch(String player1, String player2) {
         return null;

@@ -5,14 +5,11 @@ import lombok.Getter;
 import java.util.UUID;
 
 
+@Getter
 public class MatchModel {
-    @Getter
     private final UUID id;
-    private final MatchScoreModel matchScoreModel;
 
     public MatchModel(MatchScoreModel matchScoreModel) {
         this.id = UUID.randomUUID();
-        this.matchScoreModel = matchScoreModel;
     }
-
 }
