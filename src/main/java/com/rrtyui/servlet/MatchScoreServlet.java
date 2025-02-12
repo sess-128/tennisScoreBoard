@@ -26,12 +26,12 @@ public class MatchScoreServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String player = req.getParameter("player");
+        String playerId = req.getParameter("player");
         String uuid = req.getParameter("UUID");
         MatchScoreModel match = MatchStorage.getMatch(uuid);
         MatchScoreCalculationService matchScoreCalculationService = new MatchScoreCalculationService(match);
 
-        matchScoreCalculationService.addPoint(player);
+        matchScoreCalculationService.addPointToPlayer(playerId);
 
         resp.sendRedirect(req.getContextPath() + "/match-score?UUID=" + uuid);
     }

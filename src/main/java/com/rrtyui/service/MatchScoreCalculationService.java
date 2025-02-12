@@ -1,36 +1,40 @@
 package com.rrtyui.service;
 
 import com.rrtyui.dto.MatchScoreModel;
-import com.rrtyui.service.util.Accountant;
-import com.rrtyui.service.util.AdvantageStrategy;
-import com.rrtyui.service.util.TieBreakStrategy;
-import com.rrtyui.service.util.UsualStrategy;
+import com.rrtyui.service.util.*;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class MatchScoreCalculationService {
     private final MatchScoreModel matchScoreModel;
 
-    public void addPoint(String playerWhoWinPoint) {
+    public void addPointToPlayer(String playerId) {
         Accountant accountant = new Accountant(matchScoreModel);
-        accountant.setScoreCalculationStrategy(new UsualStrategy(matchScoreModel));
-        if (isDeuce()) {
-            accountant.setScoreCalculationStrategy(new AdvantageStrategy(matchScoreModel));
-        }
+        accountant.setStrategy(getStrategy());
+        accountant.addPoint(playerId);
+
+
+    }
+
+    private Strategy getStrategy() {
         if (isTieBreak()) {
-            accountant.setScoreCalculationStrategy(new TieBreakStrategy());
+            return new TieBreakStrategy(matchScoreModel);
+        } else if (isDeuce() || isAdvantage()) {
+            return new AdvantageStrategy(matchScoreModel);
+        } else {
+            return new UsualStrategy(matchScoreModel);
         }
-        accountant.calculate(playerWhoWinPoint);
     }
 
     private boolean isDeuce() {
         return matchScoreModel.getPlayer1Points() == 40 && matchScoreModel.getPlayer2Points() == 40;
-
     }
+
+    private boolean isAdvantage() {
+        return matchScoreModel.getPlayer1Points() == 50 || matchScoreModel.getPlayer2Points() == 50;
+    }
+
     private boolean isTieBreak() {
         return matchScoreModel.getPlayer1Games() == 6 && matchScoreModel.getPlayer2Games() == 6;
     }
-
-
-
 }

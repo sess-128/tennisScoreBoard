@@ -1,6 +1,6 @@
 package com.rrtyui.service.util;
 
-public interface ScoreCalculationStrategy {
+public interface Strategy {
     void addPointToFirstPlayer();
     void addPointToSecondPlayer();
 }
