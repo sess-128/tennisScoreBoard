@@ -12,8 +12,6 @@ public class MatchScoreCalculationService {
         Accountant accountant = new Accountant(matchScoreModel);
         accountant.setStrategy(getStrategy());
         accountant.addPoint(playerId);
-
-
     }
 
     private Strategy getStrategy() {
