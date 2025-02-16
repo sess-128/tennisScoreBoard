@@ -1,4 +1,4 @@
-package com.rrtyui.service.util;
+package com.rrtyui.service.matchScoreCalculationService.util.strategy;
 
 import com.rrtyui.dto.MatchScoreModel;
 
@@ -19,6 +19,7 @@ public class UsualStrategy extends BaseStrategy {
             case 40 -> {
                 incrementPlayer1Games();
                 resetPoints();
+                checkWinSet();
             }
         }
     }
@@ -33,6 +34,7 @@ public class UsualStrategy extends BaseStrategy {
             case 40 -> {
                 incrementPlayer2Games();
                 resetPoints();
+                checkWinSet();
             }
         }
     }

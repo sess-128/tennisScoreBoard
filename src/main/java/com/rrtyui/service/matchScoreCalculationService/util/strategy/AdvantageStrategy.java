@@ -1,4 +1,4 @@
-package com.rrtyui.service.util;
+package com.rrtyui.service.matchScoreCalculationService.util.strategy;
 
 import com.rrtyui.dto.MatchScoreModel;
 

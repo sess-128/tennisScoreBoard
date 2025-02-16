@@ -1,4 +1,4 @@
-package com.rrtyui.service.util;
+package com.rrtyui.service.matchScoreCalculationService.util.strategy;
 
 import com.rrtyui.dto.MatchScoreModel;
 import lombok.AllArgsConstructor;
@@ -44,5 +44,39 @@ public abstract  class BaseStrategy implements Strategy {
 
     protected boolean isPlayer2AD() {
         return matchScoreModel.getPlayer2Points() == 50;
+    }
+
+    protected void checkWinSet () {
+        int player1Games = matchScoreModel.getPlayer1Games();
+        int player2Games = matchScoreModel.getPlayer2Games();
+
+        if (player1Games > 6 && (player1Games - player2Games) >= 2) {
+            incrementPlayer1Sets();
+            resetGames();
+            resetPoints();
+        }
+
+        else if (player2Games > 6 && (player2Games - player1Games) >= 2) {
+            incrementPlayer2Sets();
+            resetGames();
+            resetPoints();
+        }
+    }
+
+    protected void checkWinTieBreak() {
+        int player1Points = matchScoreModel.getPlayer1Points();
+        int player2Points = matchScoreModel.getPlayer2Points();
+
+        if (player1Points >= 7 && (player1Points - player2Points) >= 2) {
+            incrementPlayer1Sets();
+            resetGames();
+            resetPoints();
+        }
+
+        else if (player2Points >= 7 && (player2Points - player1Points) >= 2) {
+            incrementPlayer2Sets();
+            resetGames();
+            resetPoints();
+        }
     }
 }

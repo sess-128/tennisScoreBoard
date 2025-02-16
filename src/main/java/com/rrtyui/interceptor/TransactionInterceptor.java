@@ -18,28 +18,32 @@ public class TransactionInterceptor {
 
     @RuntimeType
     public Object intercept(@SuperCall Callable<Object> call, @Origin Method method) throws Exception {
+        System.out.println("Перехват метода: " + method.getName());
         Transaction transaction = null;
         boolean transactionStarted = false;
         if (method.isAnnotationPresent(Transactional.class)) {
+            System.out.println("Метод аннотирован @Transactional");
             transaction = sessionFactory.getCurrentSession().getTransaction();
             if (!transaction.isActive()) {
                 transaction.begin();
                 transactionStarted = true;
+                System.out.println("Транзакция начата для метода: " + method.getName());
             }
         }
 
         Object result = null;
         try {
             result = call.call();
-            if (transactionStarted){
+            if (transactionStarted) {
                 transaction.commit();
+                System.out.println("Транзакция зафиксирована для метода: " + method.getName());
             }
-        } catch (Exception exception){
+        } catch (Exception exception) {
             if (transactionStarted) {
                 transaction.rollback();
+                System.out.println("Транзакция откачена для метода: " + method.getName());
             }
             throw exception;
-
         }
         return result;
     }

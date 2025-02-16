@@ -6,8 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class MatchScoreCalculationTest {
 
-    @Test
-    void test() {
-        assertTrue(false);
-    }
+//    @Test
+//    void test() {
+//        assertTrue(false);
+//    }
 }

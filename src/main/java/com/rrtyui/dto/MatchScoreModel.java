@@ -9,6 +9,7 @@ import lombok.Setter;
 public class MatchScoreModel {
     private Player player1;
     private Player player2;
+    private Player winner;
 
     private int player1Points;
     private int player1Games;

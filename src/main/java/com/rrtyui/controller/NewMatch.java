@@ -1,4 +1,4 @@
-package com.rrtyui.servlet;
+package com.rrtyui.controller;
 
 import com.rrtyui.dto.PlayerCreateDto;
 import com.rrtyui.service.OngoingMatchesService;
@@ -13,7 +13,7 @@ import org.hibernate.SessionFactory;
 import java.io.IOException;
 
 @WebServlet("/new-match")
-public class NewMatchServlet extends HttpServlet {
+public class NewMatch extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
