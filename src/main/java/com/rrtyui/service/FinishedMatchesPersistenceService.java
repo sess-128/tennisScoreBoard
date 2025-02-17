@@ -6,6 +6,7 @@ import com.rrtyui.entity.Match;
 import com.rrtyui.interceptor.TransactionInterceptor;
 import com.rrtyui.mapper.FinishedMatchCreateMapper;
 import com.rrtyui.repository.MatchRepository;
+import com.rrtyui.repository.PlayerRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import net.bytebuddy.ByteBuddy;
@@ -22,10 +23,17 @@ public class FinishedMatchesPersistenceService {
     //TODO тут будет работа с матч-репозиторием - хранить, получать и добавлять матчи
     private final MatchRepository matchRepository;
     private final FinishedMatchCreateMapper finishedMatchCreateMapper;
+    private final PlayerRepository playerRepository;
+
 
     @Transactional
     public void saveMatch(MatchScoreModel matchScoreModel) {
         var match = finishedMatchCreateMapper.mapFrom(matchScoreModel);
+
+        match.setPlayer1(playerRepository.findById(match.getPlayer1().getId()).get());
+        match.setPlayer2(playerRepository.findById(match.getPlayer2().getId()).get());
+        match.setWinner(playerRepository.findById(match.getWinner().getId()).get());
+
         matchRepository.save(match);
     }
 
