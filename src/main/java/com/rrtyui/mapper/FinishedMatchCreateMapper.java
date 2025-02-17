@@ -1,6 +1,5 @@
 package com.rrtyui.mapper;
 
-import com.rrtyui.dto.MatchResponseDto;
 import com.rrtyui.dto.MatchScoreModel;
 import com.rrtyui.entity.Match;
 

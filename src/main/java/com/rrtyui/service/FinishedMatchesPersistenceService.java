@@ -25,11 +25,8 @@ public class FinishedMatchesPersistenceService {
 
     @Transactional
     public void saveMatch(MatchScoreModel matchScoreModel) {
-        System.out.println("Маппинг MatchScoreModel в Match...");
         var match = finishedMatchCreateMapper.mapFrom(matchScoreModel);
-        System.out.println("Сохранение Match: " + match);
         matchRepository.save(match);
-        System.out.println("Match успешно сохранен.");
     }
 
     @Transactional

@@ -7,8 +7,8 @@ import lombok.AllArgsConstructor;
 public class MatchStateChecker {
     private final MatchScoreModel matchScoreModel;
 
-    public boolean isMatchEnded() {
-        return matchScoreModel.getPlayer1Sets() == 2 || matchScoreModel.getPlayer2Sets() == 2;
+    public boolean isContinue() {
+        return matchScoreModel.getPlayer1Sets() < 2 && matchScoreModel.getPlayer2Sets() < 2;
     }
 
     public boolean isDeuce() {

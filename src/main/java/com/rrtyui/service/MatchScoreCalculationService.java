@@ -6,6 +6,7 @@ import com.rrtyui.service.matchScoreCalculationService.util.MatchStateChecker;
 import com.rrtyui.service.matchScoreCalculationService.util.StrategyFactory;
 import com.rrtyui.service.matchScoreCalculationService.util.strategy.Strategy;
 import com.rrtyui.util.HibernateUtil;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -20,31 +21,23 @@ public class MatchScoreCalculationService {
         StrategyFactory strategyFactory = new StrategyFactory(matchStateChecker);
         Strategy strategy = strategyFactory.getStrategy(matchScoreModel);
 
-        if (matchStateChecker.isMatchEnded()) {
-            determineWinner();
-            saveMatchFormCalc();
-            return;
-        }
-
         Accountant accountant = new Accountant(matchScoreModel, strategy);
         accountant.addPoint(playerId);
+        if (!matchStateChecker.isContinue()) {
+            determineWinner();
+            saveMatchFormCalc();
+        }
     }
 
-    public boolean isContinue() {
-        return matchScoreModel.getPlayer1Sets() < 2 && matchScoreModel.getPlayer2Sets() < 2;
-    }
 
+    @Transactional
     public void saveMatchFormCalc() {
-        System.out.println("Start saving match...");
         try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
              Session session = HibernateUtil.getSession(sessionFactory)) {
 
-            System.out.println("Сохранение матча: " + matchScoreModel);
             FinishedMatchesPersistenceService finishedMatchesPersistenceService = FinishedMatchesPersistenceService.getInstance(session);
             finishedMatchesPersistenceService.saveMatch(matchScoreModel);
-            System.out.println("Матч успешно сохранен.");
         } catch (Exception e) {
-            System.err.println("Ошибка при сохранении матча: " + e.getMessage());
             e.printStackTrace();
         }
     }

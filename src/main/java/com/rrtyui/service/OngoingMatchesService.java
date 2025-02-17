@@ -40,7 +40,7 @@ public class OngoingMatchesService {
     }
 
     @Transactional
-    private Player getOrAddPlayer (PlayerCreateDto playerDto) {
+    private Player getOrAddPlayer(PlayerCreateDto playerDto) {
         Player player = playerCreateMapper.mapFrom(playerDto);
 
         return playerRepository.findByName(player.getName())
@@ -65,7 +65,8 @@ public class OngoingMatchesService {
                     .getLoaded()
                     .getDeclaredConstructor(PlayerRepository.class, PlayerCreateMapper.class)
                     .newInstance(playerRepository, playerCreateMapper);
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                 NoSuchMethodException e) {
             throw new RuntimeException(e);
         }
         return ongoingMatchesService;
