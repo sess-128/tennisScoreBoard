@@ -1,5 +1,6 @@
 package com.rrtyui.controller;
 
+import com.rrtyui.dto.MatchFilter;
 import com.rrtyui.dto.MatchScoreModel;
 import com.rrtyui.entity.Match;
 import com.rrtyui.service.FinishedMatchesPersistenceService;
@@ -24,24 +25,45 @@ public class Matches extends HttpServlet {
         String page = req.getParameter("page");
         String filter_by_player_name = req.getParameter("player_name");
 
+
         SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
         Session session = HibernateUtil.getSession(sessionFactory);
 
         var finishedMatchesPersistenceService = FinishedMatchesPersistenceService.getInstance(session);
 
-//        String uuid = req.getParameter("uuid");
-//        if (uuid != null || !uuid.isBlank()) {
-//            MatchScoreModel match = MatchStorage.getMatch(uuid);
-//            finishedMatchesPersistenceService.saveMatch(match);
-//        }
+        int pageInt;
+        try {
+            pageInt = Integer.parseInt(page);
+            if (pageInt < 1) {
+                pageInt = 1; // Устанавливаем значение по умолчанию, если pageInt меньше 1
+            }
+        } catch (NumberFormatException e) {
+            pageInt = 1; // Устанавливаем значение по умолчанию, если парсинг не удался
+        }
 
-        List<Match> matches = finishedMatchesPersistenceService.getAll();
+        MatchFilter matchFilter = new MatchFilter(pageInt, filter_by_player_name);
+
+        List<Match> matches = finishedMatchesPersistenceService.filteredMatches(matchFilter);
+
+//        if (page != null) {
+//            if (filter_by_player_name != null) {
+//                int pageToView = Integer.parseInt(page);
+//                matches = finishedMatchesPersistenceService.filteredMatches(pageToView, filter_by_player_name);
+//            }
+//        } else {
+//            matches = finishedMatchesPersistenceService.getAll();
+//        }
+        System.out.println("""
+                !!!!
+                !!!!
+                !!!!
+                !!!!
+                """);
+        System.out.println(matches);
 
         req.setAttribute("matches", matches);
-            RequestDispatcher dispatcher = req.getRequestDispatcher("/matches");
-            dispatcher.forward(req, resp);
-
-
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/matches.jsp");
+        dispatcher.forward(req, resp);
     }
 
     @Override

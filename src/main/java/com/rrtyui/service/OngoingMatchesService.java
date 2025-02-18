@@ -44,7 +44,7 @@ public class OngoingMatchesService {
         Player player = playerCreateMapper.mapFrom(playerDto);
 
         return playerRepository.findByName(player.getName())
-                .orElseGet(() -> playerRepository.save(player));
+                .orElseGet(() -> playerRepository.update(player));
     }
 
     public static OngoingMatchesService getInstance(Session session) {
@@ -58,7 +58,7 @@ public class OngoingMatchesService {
         try {
             ongoingMatchesService = new ByteBuddy()
                     .subclass(OngoingMatchesService.class)
-                    .method(ElementMatchers.any())
+                    .method(ElementMatchers.isAnnotatedWith(Transactional.class))
                     .intercept(MethodDelegation.to(transactionInterceptor))
                     .make()
                     .load(OngoingMatchesService.class.getClassLoader())

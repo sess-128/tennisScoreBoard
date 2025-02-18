@@ -21,6 +21,7 @@ public class HibernateUtil {
         Configuration configuration = new Configuration()
                 .addAnnotatedClass(Player.class)
                 .addAnnotatedClass(Match.class)
+                .setProperty("hibernate.current_session_context_class", "thread")
                 .configure();
 
         return configuration.buildSessionFactory();

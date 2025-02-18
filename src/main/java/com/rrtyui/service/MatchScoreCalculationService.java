@@ -32,14 +32,11 @@ public class MatchScoreCalculationService {
 
     @Transactional
     public void saveMatchFormCalc() {
-        try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
-             Session session = HibernateUtil.getSession(sessionFactory)) {
+        SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
+        Session session = HibernateUtil.getSession(sessionFactory);
 
-            FinishedMatchesPersistenceService finishedMatchesPersistenceService = FinishedMatchesPersistenceService.getInstance(session);
-            finishedMatchesPersistenceService.saveMatch(matchScoreModel);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        FinishedMatchesPersistenceService finishedMatchesPersistenceService = FinishedMatchesPersistenceService.getInstance(session);
+        finishedMatchesPersistenceService.saveMatch(matchScoreModel);
     }
 
     private void determineWinner() {

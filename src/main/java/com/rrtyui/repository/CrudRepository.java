@@ -1,10 +1,15 @@
 package com.rrtyui.repository;
 
+import com.rrtyui.dto.MatchFilter;
+import com.rrtyui.entity.Match;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,14 +21,15 @@ public abstract class CrudRepository<K extends Serializable, E> implements Repos
 
 
     @Override
+    @Transactional
     public E save(E entity) {
         entityManager.persist(entity);
         return entity;
     }
 
     @Override
-    public void update(E entity) {
-        entityManager.merge(entity);
+    public E update(E entity) {
+        return entityManager.merge(entity);
     }
 
     @Override
@@ -52,5 +58,20 @@ public abstract class CrudRepository<K extends Serializable, E> implements Repos
         criteria.from(clazz);
         return entityManager.createQuery(criteria).getResultList();
     }
+
+
+    public List<Match> findAll(MatchFilter matchFilter) {
+        return entityManager.createQuery(
+                        "SELECT m FROM Match m " +
+                                "JOIN m.player1 p1 " +
+                                "JOIN m.player2 p2 " +
+                                "WHERE p1.name LIKE :playerName OR p2.name LIKE :playerName", Match.class)
+                .setParameter("playerName", "%" + matchFilter.name() + "%") // Используйте имя игрока из фильтра
+                .setFirstResult(matchFilter.offset() * 5) // Установите смещение
+                .setMaxResults(5) // Установите лимит
+                .getResultList();
+    }
+
+
 }
 

@@ -1,5 +1,6 @@
 package com.rrtyui.service;
 
+import com.rrtyui.dto.MatchFilter;
 import com.rrtyui.dto.MatchResponseDto;
 import com.rrtyui.dto.MatchScoreModel;
 import com.rrtyui.entity.Match;
@@ -30,11 +31,16 @@ public class FinishedMatchesPersistenceService {
     }
 
     @Transactional
-    public List<Match> getAll () {
+    public List<Match> getAll() {
         return matchRepository.findAll();
     }
 
-    public static FinishedMatchesPersistenceService getInstance (Session session) {
+    @Transactional
+    public List<Match> filteredMatches(MatchFilter matchFilter) {
+        return matchRepository.findAll(matchFilter);
+    }
+
+    public static FinishedMatchesPersistenceService getInstance(Session session) {
 
         SessionFactory sessionFactory = session.getSessionFactory();
 
@@ -45,14 +51,15 @@ public class FinishedMatchesPersistenceService {
         try {
             finishedMatchesPersistenceService = new ByteBuddy()
                     .subclass(FinishedMatchesPersistenceService.class)
-                    .method(ElementMatchers.any())
+                    .method(ElementMatchers.isAnnotatedWith(Transactional.class)) // Перехватываем только методы с @Transactional
                     .intercept(MethodDelegation.to(transactionInterceptor))
                     .make()
                     .load(FinishedMatchesPersistenceService.class.getClassLoader())
                     .getLoaded()
                     .getDeclaredConstructor(MatchRepository.class, FinishedMatchCreateMapper.class)
                     .newInstance(matchRepository, finishedMatchCreateMapper);
-        } catch (InvocationTargetException | InstantiationException | IllegalAccessException | NoSuchMethodException e) {
+        } catch (InvocationTargetException | InstantiationException | IllegalAccessException |
+                 NoSuchMethodException e) {
             throw new RuntimeException(e);
         }
 
