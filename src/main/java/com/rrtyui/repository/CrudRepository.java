@@ -5,12 +5,10 @@ import com.rrtyui.dto.MatchPageResponseDto;
 import com.rrtyui.entity.Match;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
-import jakarta.persistence.criteria.Predicate;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -134,13 +132,21 @@ public abstract class CrudRepository<K extends Serializable, E> implements Repos
     }
 
     public long countAll(MatchFilter matchFilter) {
-        return entityManager.createQuery(
-                "SELECT m FROM Match m " +
-                        "JOIN m.player1 p1 " +
-                        "JOIN m.player2 p2 " +
-                        "WHERE p1.name LIKE :playerName OR p2.name LIKE :playerName", Long.class)
-                .setParameter("playerName", "%" + matchFilter.name() + "%") // Используйте имя игрока из фильтра
-                .getSingleResult();
+        String queryString = "SELECT COUNT(m) FROM Match m " +
+                "JOIN m.player1 p1 " +
+                "JOIN m.player2 p2 ";
+
+        if (matchFilter.name() != null && !matchFilter.name().isEmpty()) {
+            queryString += "WHERE p1.name LIKE :playerName OR p2.name LIKE :playerName ";
+        }
+
+        TypedQuery<Long> query = entityManager.createQuery(queryString, Long.class);
+
+        if (matchFilter.name() != null && !matchFilter.name().isEmpty()) {
+            query.setParameter("playerName", "%" + matchFilter.name() + "%");
+        }
+
+        return query.getSingleResult();
     }
 
 }
