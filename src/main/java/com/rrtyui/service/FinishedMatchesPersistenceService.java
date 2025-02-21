@@ -1,7 +1,7 @@
 package com.rrtyui.service;
 
 import com.rrtyui.dto.MatchFilter;
-import com.rrtyui.dto.MatchResponseDto;
+import com.rrtyui.dto.MatchPageResponseDto;
 import com.rrtyui.dto.MatchScoreModel;
 import com.rrtyui.entity.Match;
 import com.rrtyui.interceptor.TransactionInterceptor;
@@ -36,8 +36,13 @@ public class FinishedMatchesPersistenceService {
     }
 
     @Transactional
-    public List<Match> filteredMatches(MatchFilter matchFilter) {
+    public List<Match> getAll(MatchFilter matchFilter) {
         return matchRepository.findAll(matchFilter);
+    }
+
+    @Transactional
+    public MatchPageResponseDto pagina(MatchFilter matchFilter) {
+        return matchRepository.findAllWithPagination(matchFilter);
     }
 
     public static FinishedMatchesPersistenceService getInstance(Session session) {

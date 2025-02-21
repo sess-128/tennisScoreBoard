@@ -3,6 +3,8 @@ package com.rrtyui.controller;
 import com.rrtyui.dto.PlayerCreateDto;
 import com.rrtyui.service.OngoingMatchesService;
 import com.rrtyui.util.HibernateUtil;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,6 +16,12 @@ import java.io.IOException;
 
 @WebServlet("/new-match")
 public class NewMatch extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/new-match.jsp");
+        dispatcher.forward(req, resp);
+    }
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();

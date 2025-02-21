@@ -1,6 +1,7 @@
 package com.rrtyui.controller;
 
 import com.rrtyui.dto.MatchFilter;
+import com.rrtyui.dto.MatchPageResponseDto;
 import com.rrtyui.dto.MatchScoreModel;
 import com.rrtyui.entity.Match;
 import com.rrtyui.service.FinishedMatchesPersistenceService;
@@ -23,7 +24,7 @@ public class Matches extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String page = req.getParameter("page");
-        String filter_by_player_name = req.getParameter("player_name");
+        String filter_by_player_name = req.getParameter("filter_by_player_name");
 
 
         SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
@@ -43,23 +44,7 @@ public class Matches extends HttpServlet {
 
         MatchFilter matchFilter = new MatchFilter(pageInt, filter_by_player_name);
 
-        List<Match> matches = finishedMatchesPersistenceService.filteredMatches(matchFilter);
-
-//        if (page != null) {
-//            if (filter_by_player_name != null) {
-//                int pageToView = Integer.parseInt(page);
-//                matches = finishedMatchesPersistenceService.filteredMatches(pageToView, filter_by_player_name);
-//            }
-//        } else {
-//            matches = finishedMatchesPersistenceService.getAll();
-//        }
-        System.out.println("""
-                !!!!
-                !!!!
-                !!!!
-                !!!!
-                """);
-        System.out.println(matches);
+        var paginaed = finishedMatchesPersistenceService.pagina(matchFilter);
 
         req.setAttribute("matches", matches);
         RequestDispatcher dispatcher = req.getRequestDispatcher("/matches.jsp");
