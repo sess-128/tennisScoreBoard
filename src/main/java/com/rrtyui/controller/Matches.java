@@ -46,9 +46,17 @@ public class Matches extends HttpServlet {
 
         var paginaed = finishedMatchesPersistenceService.pagina(matchFilter);
 
-        req.setAttribute("matches", matches);
+        System.out.println("""
+                !!!!
+                !!!!
+                !!!!
+                """);
+        System.out.println(paginaed);
+
+        req.setAttribute("matchPageResponseDto", paginaed);
         RequestDispatcher dispatcher = req.getRequestDispatcher("/matches.jsp");
         dispatcher.forward(req, resp);
+
     }
 
     @Override
