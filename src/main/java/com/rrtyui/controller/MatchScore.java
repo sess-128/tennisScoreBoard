@@ -31,6 +31,7 @@ public class MatchScore extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String playerId = req.getParameter("player");
         String uuid = req.getParameter("UUID");
+
         MatchScoreModel match = MatchStorage.getMatch(uuid);
         MatchScoreCalculationService matchScoreCalculationService = new MatchScoreCalculationService(match);
 

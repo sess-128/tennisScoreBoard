@@ -12,7 +12,7 @@
 </head>
 <body>
 <%
-    
+
     String uuidString = request.getParameter("UUID");
     MatchScoreModel match = MatchStorage.getMatch(uuidString);
     if (match.getPlayer1Sets() < 2 && match.getPlayer2Sets() < 2) {
