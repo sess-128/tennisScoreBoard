@@ -5,12 +5,10 @@ import com.rrtyui.dto.MatchPageResponseDto;
 import com.rrtyui.entity.Match;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
-import jakarta.persistence.criteria.Predicate;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +17,7 @@ public abstract class CrudRepository<K extends Serializable, E> implements Repos
 
     private final Class<E> clazz;
     private final EntityManager entityManager;
+    private static final int PAGE_SIZE = 5;
 
 
     @Override
@@ -60,56 +59,16 @@ public abstract class CrudRepository<K extends Serializable, E> implements Repos
         return entityManager.createQuery(criteria).getResultList();
     }
 
-
-    public List<Match> findAll(MatchFilter matchFilter) {
-        // Базовый запрос
-        String queryString = "SELECT m FROM Match m " +
-                "JOIN m.player1 p1 " +
-                "JOIN m.player2 p2 ";
-
-        // Добавляем условие фильтрации по имени, если имя указано
-        if (matchFilter.name() != null && !matchFilter.name().isEmpty()) {
-            queryString += "WHERE p1.name LIKE :playerName OR p2.name LIKE :playerName ";
-        }
-
-        // Создаем запрос
-        TypedQuery<Match> query = entityManager.createQuery(queryString, Match.class);
-
-        // Устанавливаем параметр для фильтрации по имени, если имя указано
-        if (matchFilter.name() != null && !matchFilter.name().isEmpty()) {
-            query.setParameter("playerName", "%" + matchFilter.name() + "%");
-        }
-
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!" +
-                "!!!!!!!!!!!!!!!!!!!!");
-        System.out.println(matchFilter.name());
-
-        // Применяем пагинацию
-        query.setFirstResult((matchFilter.offset() - 1) * 5) // Смещение
-                .setMaxResults(5); // Лимит
-
-        // Возвращаем результат
-        return query.getResultList();
-    }
-
-
-
-
-
     public MatchPageResponseDto findAllWithPagination(MatchFilter matchFilter) {
-        // Считаем общее количество матчей
-        long totalMatches = countAll(matchFilter);
+        long totalMatches = countAllMatches(matchFilter);
 
-        // Вычисляем общее количество страниц
-        int totalPages = (int) Math.ceil((double) totalMatches / 5);
+        int totalPages = (int) Math.ceil((double) totalMatches / PAGE_SIZE);
 
-        // Корректируем page, если он слишком большой
         if (matchFilter.offset() > totalPages) {
             matchFilter = new MatchFilter(totalPages, matchFilter.name());
         }
 
-        // Выполняем запрос с пагинацией
-        int offset = (matchFilter.offset() - 1) * 5;
+        int offset = (matchFilter.offset() - 1) * PAGE_SIZE;
 
         String queryString = "SELECT m FROM Match m " +
                 "JOIN m.player1 p1 " +
@@ -126,21 +85,29 @@ public abstract class CrudRepository<K extends Serializable, E> implements Repos
         }
 
         query.setFirstResult(offset)
-                .setMaxResults(5);
+                .setMaxResults(PAGE_SIZE);
 
         List<Match> matches = query.getResultList();
 
         return new MatchPageResponseDto(matches, matchFilter.offset(), totalPages);
     }
 
-    public long countAll(MatchFilter matchFilter) {
-        return entityManager.createQuery(
-                "SELECT m FROM Match m " +
-                        "JOIN m.player1 p1 " +
-                        "JOIN m.player2 p2 " +
-                        "WHERE p1.name LIKE :playerName OR p2.name LIKE :playerName", Long.class)
-                .setParameter("playerName", "%" + matchFilter.name() + "%") // Используйте имя игрока из фильтра
-                .getSingleResult();
+    public long countAllMatches(MatchFilter matchFilter) {
+        String queryString = "SELECT COUNT(m) FROM Match m " +
+                "JOIN m.player1 p1 " +
+                "JOIN m.player2 p2 ";
+
+        if (matchFilter.name() != null && !matchFilter.name().isEmpty()) {
+            queryString += "WHERE p1.name LIKE :playerName OR p2.name LIKE :playerName ";
+        }
+
+        TypedQuery<Long> query = entityManager.createQuery(queryString, Long.class);
+
+        if (matchFilter.name() != null && !matchFilter.name().isEmpty()) {
+            query.setParameter("playerName", "%" + matchFilter.name() + "%");
+        }
+
+        return query.getSingleResult();
     }
 
 }

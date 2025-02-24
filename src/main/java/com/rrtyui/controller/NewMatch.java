@@ -3,6 +3,7 @@ package com.rrtyui.controller;
 import com.rrtyui.dto.PlayerCreateDto;
 import com.rrtyui.service.OngoingMatchesService;
 import com.rrtyui.util.HibernateUtil;
+import com.rrtyui.util.Validation;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -31,6 +32,8 @@ public class NewMatch extends HttpServlet {
 
         String player1 = req.getParameter("player_1");
         String player2 = req.getParameter("player_2");
+
+        Validation.validate(player1, player2);
 
         PlayerCreateDto playerCreateDto = new PlayerCreateDto(player1);
         PlayerCreateDto playerCreateDto2 = new PlayerCreateDto(player2);

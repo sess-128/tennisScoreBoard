@@ -8,19 +8,22 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>New match test</title>
+    <meta charset="UTF-8">
+    <title>New match test</title>
+    <link rel="stylesheet" href="css/index.css">
+    <script type="text/javascript" src="js/ErrorMessageAlert.js"></script>
 </head>
-<body>
-<form action="${pageContext.request.contextPath}/new-match" method="post" id="start">
-  <label>
-    <input type="text" name="player_1">
-  </label>
-  <label>
-    <input type="text" name="player_2">
-  </label>
-  <button type="submit" form="start">Начать матч</button>
-</form>
-
+<body onload="showError('${errorMessage}')">
+<div class="container">
+    <form action="${pageContext.request.contextPath}/new-match" method="post" id="start">
+        <label>
+            <input type="text" name="player_1">
+        </label>
+        <label>
+            <input type="text" name="player_2">
+        </label>
+        <button type="submit" form="start">Начать матч</button>
+    </form>
+</div>
 </body>
 </html>

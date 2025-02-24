@@ -30,15 +30,7 @@ public class FinishedMatchesPersistenceService {
         matchRepository.save(match);
     }
 
-    @Transactional
-    public List<Match> getAll() {
-        return matchRepository.findAll();
-    }
 
-    @Transactional
-    public List<Match> getAll(MatchFilter matchFilter) {
-        return matchRepository.findAll(matchFilter);
-    }
 
     @Transactional
     public MatchPageResponseDto pagina(MatchFilter matchFilter) {

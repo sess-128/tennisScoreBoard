@@ -44,9 +44,11 @@ public class Matches extends HttpServlet {
 
         MatchFilter matchFilter = new MatchFilter(pageInt, filter_by_player_name);
 
-        var paginaed = finishedMatchesPersistenceService.pagina(matchFilter);
+        var matches = finishedMatchesPersistenceService.pagina(matchFilter);
 
-        req.setAttribute("matches", paginaed);
+
+
+        req.setAttribute("matches", matches);
         RequestDispatcher dispatcher = req.getRequestDispatcher("/matches.jsp");
         dispatcher.forward(req, resp);
     }
@@ -56,5 +58,3 @@ public class Matches extends HttpServlet {
 
     }
 }
-
-//TODO /matches?page=$page_number&filter_by_player_name=$player_name

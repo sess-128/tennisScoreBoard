@@ -8,11 +8,14 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Главная страница</title>
+    <meta charset="UTF-8">
+    <title>Главная страница</title>
+    <link rel="stylesheet" href="css/index.css">
 </head>
 <body>
-<a href="${pageContext.request.contextPath}/new-match"> Новый матч</a>
-<a href="${pageContext.request.contextPath}/matches"> Список матчей</a>
+<div class="container">
+    <a href="${pageContext.request.contextPath}/new-match">Новый матч</a>
+    <a href="${pageContext.request.contextPath}/matches">Список матчей</a>
+</div>
 </body>
 </html>
