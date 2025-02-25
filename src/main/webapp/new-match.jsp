@@ -14,6 +14,10 @@
     <script type="text/javascript" src="js/ErrorMessageAlert.js"></script>
 </head>
 <body onload="showError('${errorMessage}')">
+<div class="header">
+    <a href="${pageContext.request.contextPath}/new-match">Новый матч</a>
+    <a href="${pageContext.request.contextPath}/matches">Список матчей</a>
+</div>
 <div class="container">
     <form action="${pageContext.request.contextPath}/new-match" method="post" id="start">
         <label>
@@ -24,6 +28,9 @@
         </label>
         <button type="submit" form="start">Начать матч</button>
     </form>
+</div>
+<div class="footer">
+    <p>© Tennis Scoreboard, project from <a href="https://zhukovsd.github.io/java-backend-learning-course/">zhukovsd/java-backend-learning-course</a> roadmap.</p>
 </div>
 </body>
 </html>

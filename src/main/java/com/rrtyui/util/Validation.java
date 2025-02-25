@@ -1,5 +1,6 @@
 package com.rrtyui.util;
 
+import com.rrtyui.dto.MatchScoreModel;
 import com.rrtyui.exception.IncorrectNameException;
 import com.rrtyui.exception.IncorrectUUIDException;
 
@@ -17,7 +18,10 @@ public class Validation {
             containsOnlyLetters(name);
         }
     }
-    public static void validateUUID(String uuid) {
+    public static void validateUUID(String uuid, MatchScoreModel matchScoreModel) {
+        if (matchScoreModel == null) {
+            throw new IncorrectUUIDException("Некорректный UUID: " + uuid);
+        }
         try {
             UUID.fromString(uuid);
         } catch (IllegalArgumentException e) {

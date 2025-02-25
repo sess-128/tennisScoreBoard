@@ -4,7 +4,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-
+    flex-direction: column;
 
     margin: 0;
     padding: 0;
@@ -73,7 +73,6 @@ input:focus {
 }
 
 
-
 button {
     padding: 10px 20px;
     font-size: 14px;
@@ -133,6 +132,12 @@ tr:last-child td {
     border-bottom: none;
 }
 
+.header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+}
 
 
 
