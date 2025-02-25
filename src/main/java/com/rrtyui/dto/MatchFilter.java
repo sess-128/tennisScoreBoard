@@ -1,5 +1,5 @@
 package com.rrtyui.dto;
 
-public record MatchFilter(int offset,
+public record MatchFilter(int page,
                           String name) {
 }

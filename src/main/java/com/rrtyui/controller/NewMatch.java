@@ -11,7 +11,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 
 import java.io.IOException;
 
@@ -25,8 +24,7 @@ public class NewMatch extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
-        Session session = HibernateUtil.getSession(sessionFactory);
+        Session session = HibernateUtil.getSession();
 
         var ongoingMatchesService = OngoingMatchesService.getInstance(session);
 

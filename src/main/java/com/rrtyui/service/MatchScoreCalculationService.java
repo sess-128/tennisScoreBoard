@@ -9,11 +9,11 @@ import com.rrtyui.util.HibernateUtil;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 
 
 @AllArgsConstructor
 public class MatchScoreCalculationService {
+    private static final int WIN_GAME_SETS = 2;
     private final MatchScoreModel matchScoreModel;
 
     public void addPointToPlayer(String playerId) {
@@ -21,7 +21,7 @@ public class MatchScoreCalculationService {
         StrategyFactory strategyFactory = new StrategyFactory(matchStateChecker);
         Strategy strategy = strategyFactory.getStrategy(matchScoreModel);
 
-        Accountant accountant = new Accountant(matchScoreModel, strategy);
+        Accountant accountant = new Accountant(strategy);
         accountant.addPoint(playerId);
         if (!matchStateChecker.isContinue()) {
             determineWinner();
@@ -29,18 +29,16 @@ public class MatchScoreCalculationService {
         }
     }
 
-
     @Transactional
     public void saveMatchFormCalc() {
-        SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
-        Session session = HibernateUtil.getSession(sessionFactory);
+        Session session = HibernateUtil.getSession();
 
         FinishedMatchesPersistenceService finishedMatchesPersistenceService = FinishedMatchesPersistenceService.getInstance(session);
         finishedMatchesPersistenceService.saveMatch(matchScoreModel);
     }
 
     private void determineWinner() {
-        if (matchScoreModel.getPlayer1Sets() == 2) {
+        if (matchScoreModel.getPlayer1Sets() == WIN_GAME_SETS) {
             matchScoreModel.setWinner(matchScoreModel.getPlayer1());
         } else {
             matchScoreModel.setWinner(matchScoreModel.getPlayer2());

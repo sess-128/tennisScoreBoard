@@ -1,6 +1,7 @@
 package com.rrtyui.filter;
 
 import com.rrtyui.exception.IncorrectNameException;
+import com.rrtyui.exception.IncorrectPageNumberException;
 import com.rrtyui.exception.IncorrectUUIDException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -23,6 +24,9 @@ public class ExceptionFilter extends HttpFilter {
         } catch (IncorrectUUIDException exception) {
             req.setAttribute("errorMessage", exception.getMessage());
             req.getRequestDispatcher("/match-score.jsp").forward(req, res);
+        } catch (IncorrectPageNumberException exception) {
+            req.setAttribute("errorMessage", exception.getMessage());
+            req.getRequestDispatcher("/matches.jsp").forward(req, res);
         }
     }
 }

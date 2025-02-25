@@ -3,7 +3,6 @@ package com.rrtyui.service;
 import com.rrtyui.dto.MatchFilter;
 import com.rrtyui.dto.MatchPageResponseDto;
 import com.rrtyui.dto.MatchScoreModel;
-import com.rrtyui.entity.Match;
 import com.rrtyui.interceptor.TransactionInterceptor;
 import com.rrtyui.mapper.FinishedMatchCreateMapper;
 import com.rrtyui.repository.MatchRepository;
@@ -16,11 +15,9 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 
 @RequiredArgsConstructor
 public class FinishedMatchesPersistenceService {
-    //TODO тут будет работа с матч-репозиторием - хранить, получать и добавлять матчи
     private final MatchRepository matchRepository;
     private final FinishedMatchCreateMapper finishedMatchCreateMapper;
 
@@ -30,15 +27,12 @@ public class FinishedMatchesPersistenceService {
         matchRepository.save(match);
     }
 
-
-
     @Transactional
-    public MatchPageResponseDto pagina(MatchFilter matchFilter) {
+    public MatchPageResponseDto getMatchesPagination(MatchFilter matchFilter) {
         return matchRepository.findAllWithPagination(matchFilter);
     }
 
     public static FinishedMatchesPersistenceService getInstance(Session session) {
-
         SessionFactory sessionFactory = session.getSessionFactory();
 
         var matchRepository = new MatchRepository(session);
@@ -59,7 +53,6 @@ public class FinishedMatchesPersistenceService {
                  NoSuchMethodException e) {
             throw new RuntimeException(e);
         }
-
         return finishedMatchesPersistenceService;
     }
 }

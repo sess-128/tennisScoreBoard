@@ -21,9 +21,9 @@ public class CorsFilter extends HttpFilter {
         httpResponse.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
         httpResponse.setHeader("Access-Control-Max-Age", "1200");
 
-        if("OPTIONS".equals(req.getMethod())) {
+        if ("OPTIONS".equals(req.getMethod())) {
             res.setStatus(HttpServletResponse.SC_OK);
-        }else{
+        } else {
             chain.doFilter(req, res);
         }
 

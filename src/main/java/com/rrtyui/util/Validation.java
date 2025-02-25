@@ -18,9 +18,10 @@ public class Validation {
             containsOnlyLetters(name);
         }
     }
+
     public static void validateUUID(String uuid, MatchScoreModel matchScoreModel) {
         if (matchScoreModel == null) {
-            throw new IncorrectUUIDException("Некорректный UUID: " + uuid);
+            throw new IncorrectUUIDException("Матча с таким UUID нет: " + uuid);
         }
         try {
             UUID.fromString(uuid);
@@ -29,13 +30,13 @@ public class Validation {
         }
     }
 
-    private static void nullOrBlank(String playerName)  {
+    private static void nullOrBlank(String playerName) {
         if (playerName == null || playerName.isBlank()) {
             throw new IncorrectNameException("Имя игрока не может быть пустым");
         }
     }
 
-    private static void checkNameLength (String playerName) {
+    private static void checkNameLength(String playerName) {
         if (playerName.length() < MIN_LENGTH || playerName.length() > MAX_LENGTH) {
             throw new IncorrectNameException(
                     "Дядь, ну не гони. Длина от %s до %s"

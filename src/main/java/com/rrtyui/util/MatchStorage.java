@@ -10,7 +10,6 @@ public class MatchStorage {
     private static final Map<UUID, MatchScoreModel> ongoingMatches = new ConcurrentHashMap<>();
 
     public static void addMatch(UUID uuid, MatchScoreModel match) {
-
         ongoingMatches.put(uuid, match);
     }
 
@@ -22,7 +21,4 @@ public class MatchStorage {
         ongoingMatches.remove(UUID.fromString(uuid));
     }
 
-    public static Map<UUID, MatchScoreModel> getAllMatches() {
-        return ongoingMatches;
-    }
 }
